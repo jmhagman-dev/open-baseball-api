@@ -1,0 +1,30 @@
+{
+  "name": "open-baseball-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --env-file=.env ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmhagman-dev/open-baseball-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jmhagman-dev/open-baseball-api/issues"
+  },
+  "homepage": "https://github.com/jmhagman-dev/open-baseball-api#readme",
+  "dependencies": {
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.14.2",
+    "nodemon": "^3.1.10"
+  }
+}

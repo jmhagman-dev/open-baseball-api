@@ -6,12 +6,13 @@ import compression from 'compression';
 import mysql from 'mysql2/promise';
 
 const app = express();
-const port = process.env.PORT || 3001;
+
 
 app.use(cors({ origin: '*' }));
 app.use(helmet)
 app.use(compression())
 app.use(morgan('tiny'));
+
 
 const connection = await mysql.createConnection({
   host: process.env.SQL_HOST,
@@ -21,16 +22,16 @@ const connection = await mysql.createConnection({
 });
 
 try {
-  const [results, fields] = await connection.query(
-    'SELECT * FROM people.employees',
+  const results = await connection.query(
+    'SELECT * FROM baseball.players',
   );
 
-  console.log({fields, results});
+  console.log(results)
 
 } catch (err) {
   console.log(err);
 }
 
-app.listen((port), () => {
-  console.log(`App now listening on port ${port}`)
+app.listen((3001), () => {
+  console.log(`App now listening on port ${3001}`)
 });
