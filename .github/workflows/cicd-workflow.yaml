@@ -36,4 +36,4 @@ jobs:
         run: docker rm -f open-baseball-api-container || true
 
       - name: Run Docker container
-        run: docker run -d -p 5000:5000 --name open-baseball-api-container jmhagmandev/open-baseball-api:latest
+        run: docker run -d -p 5000:5000 --name jmhagmandev/open-baseball-api:latest
