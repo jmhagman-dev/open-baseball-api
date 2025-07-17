@@ -6,7 +6,7 @@ import compression from 'compression';
 import players from './routes/players.js';
 
 const app = express();
-const port = 3001;
+const port = 5000;
 
 app.use(cors({ origin: '*' }));
 app.use(helmet());
