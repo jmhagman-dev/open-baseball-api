@@ -23,7 +23,6 @@ jobs:
 
       - name: Publish image to Docker Hub (commit SHA)
         run: docker push jmhagmandev/open-baseball-api:${{ github.sha }}
-        run: docker push jmhagmandev/open-baseball-api:latest
    
   deploy:
     needs: build
