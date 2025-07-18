@@ -5,21 +5,20 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const [results] = await db.query(`SELECT * FROM icqyziic3s8brpuj.players`);
-    res.status(200).send(results);
+    const [result] = await db.query(`SELECT * FROM players`);
+    res.status(200).send(result);
   } catch (err) {
-    res.send(err);
+    res.status(500).send(err);
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:player_id', async (req, res, next) => {
   try {
-    const [results] = await db.query(
-      `SELECT * FROM icqyziic3s8brpuj.players WHERE player_id=${req.params.player_id}`,
-    );
-    res.status(200).send(results[0]);
+    const sql = `SELECT * FROM players WHERE player_id=${req.params.player_id}`;
+    const [result] = await db.query(sql);
+    res.status(200).send(result[0]);
   } catch (err) {
-    res.send(err);
+    res.status(500).send(err);
   }
 });
 
@@ -47,10 +46,16 @@ router.post('/', async (req, res, next) => {
       positions,
     ];
 
-    const [result, error] = await db.query(sql, values);
-    res.send(result, error);
+    const [result] = await db.query(sql, values);
+    res
+      .status(201)
+      .send({
+        status: 201,
+        messsage: 'Successfully added new player to database',
+        result,
+      });
   } catch (error) {
-    res.send(error);
+    res.status(500).send(error);
   }
 });
 
