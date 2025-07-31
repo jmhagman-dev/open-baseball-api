@@ -15,6 +15,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny'));
 
+app.get('/env', (req, res, next) => {
+  try {
+    const env = app.get('env');
+    res.status(200).send({message: `Currently running in ${env} mode`})
+  } catch (error) {
+  }
+})
+
 app.use('/api/players', players);
 
 app.listen(port, () => {

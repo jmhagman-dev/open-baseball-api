@@ -4,8 +4,6 @@ import db from '../db.js';
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  console.log(req.query)
-  Object.keys(req.query)
   try {
     const [result] = await db.query(`SELECT * FROM players`);
     res.status(200).send(result);
@@ -49,15 +47,21 @@ router.post('/', async (req, res, next) => {
     ];
 
     const [result] = await db.query(sql, values);
-    res
-      .status(201)
-      .send({
-        status: 201,
-        messsage: 'Successfully added new player to database',
-        result,
-      });
-  } catch (err) {
-    res.status(500).send(err.message);
+    res.status(201).send({
+      status: 201,
+      messsage: 'Successfully added new player to database',
+      player: {
+        first_name,
+        last_name,
+        uniform_number,
+        bats,
+        throws,
+        team,
+        positions,
+      },
+    });
+  } catch (error) {
+    res.status(500).send();
   }
 });
 
