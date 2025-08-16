@@ -65,11 +65,47 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.put('/:player_id', async (req, res, next) => {
+  const playerId = req.params.player_id;
+  const updateData = req.body;
+  try {
+    const setClause = Object.keys(updateData)
+      .map((key) => `${key} = ?`)
+      .join(', ');
+    const values = Object.values(updateData);
+    const sql = `UPDATE players SET ${setClause} WHERE player_id = ?`;
+
+    const [rows, fields] = await db.query(sql, [...values, playerId]);
+    
+    if (rows.affectedRows === 0) {
+      return res.status(404).send({ message: `Player with  ${playerId} not found` });
+    }
+
+    res.status(201).send({
+      status: 201,
+      message: `Player with player_id:${playerId} has been updated`,
+    });
+
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 router.delete('/:player_id', async (req, res, next) => {
   try {
     const sql = `DELETE FROM players WHERE player_id=${req.params.player_id}`;
-    const result = await db.query(sql)
-    res.status(200).send({ status: 204, message: `Player with player_id:${player_id} has been deleted`, result });
+    const result = await db.query(sql);
+       
+    if (rows.affectedRows === 0) {
+      return res.status(404).send({ message: `Player with  ${playerId} not found` });
+    }
+
+    res.status(200).send({
+      status: 204,
+      message: `Player with player_id:${player_id} has been deleted`,
+      result,
+    });
+    
   } catch (err) {
     res.status(500).send(err.message);
   }
