@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
     const [result] = await db.query(`SELECT * FROM players`);
     res.status(200).send(result);
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send(err.message);
   }
 });
 
@@ -46,7 +46,7 @@ router.post('/', async (req, res, next) => {
       positions,
     ];
 
-    const [result] = await db.query(sql, values);
+    await db.query(sql, values);
     res.status(201).send({
       status: 201,
       messsage: 'Successfully added new player to database',
@@ -60,8 +60,18 @@ router.post('/', async (req, res, next) => {
         positions,
       },
     });
-  } catch (error) {
-    res.status(500).send();
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.delete('/:player_id', async (req, res, next) => {
+  try {
+    const sql = `DELETE FROM players WHERE player_id=${req.params.player_id}`;
+    const result = await db.query(sql)
+    res.status(200).send({ status: 204, message: `Player with player_id:${player_id} has been deleted`, result });
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 });
 
