@@ -5,7 +5,15 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const [result] = await db.query(`SELECT * FROM players`);
+    const queryData = req.query;
+
+    const whereClause = Object.keys(queryData)
+      .map((key) => `${key} = ?`)
+      .join(' AND ');
+    const sql = `SELECT * FROM players WHERE ${whereClause}`;
+    const values = Object.values(queryData);
+    console.log(values);
+    const [result] = await db.execute(sql, values);
     res.status(200).send(result);
   } catch (err) {
     res.status(500).send(err.message);
@@ -76,16 +84,17 @@ router.put('/:player_id', async (req, res, next) => {
     const sql = `UPDATE players SET ${setClause} WHERE player_id = ?`;
 
     const [rows, fields] = await db.query(sql, [...values, playerId]);
-    
+
     if (rows.affectedRows === 0) {
-      return res.status(404).send({ message: `Player with  ${playerId} not found` });
+      return res
+        .status(404)
+        .send({ message: `Player with  ${playerId} not found` });
     }
 
     res.status(201).send({
       status: 201,
       message: `Player with player_id:${playerId} has been updated`,
     });
-
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -95,9 +104,11 @@ router.delete('/:player_id', async (req, res, next) => {
   try {
     const sql = `DELETE FROM players WHERE player_id=${req.params.player_id}`;
     const result = await db.query(sql);
-       
+
     if (rows.affectedRows === 0) {
-      return res.status(404).send({ message: `Player with  ${playerId} not found` });
+      return res
+        .status(404)
+        .send({ message: `Player with  ${playerId} not found` });
     }
 
     res.status(200).send({
@@ -105,7 +116,6 @@ router.delete('/:player_id', async (req, res, next) => {
       message: `Player with player_id:${player_id} has been deleted`,
       result,
     });
-    
   } catch (err) {
     res.status(500).send(err.message);
   }
