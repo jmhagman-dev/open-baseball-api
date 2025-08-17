@@ -6,13 +6,11 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
   try {
     const queryData = req.query;
-
     const whereClause = Object.keys(queryData)
       .map((key) => `${key} = ?`)
       .join(' AND ');
     const sql = `SELECT * FROM players WHERE ${whereClause}`;
     const values = Object.values(queryData);
-    console.log(values);
     const [result] = await db.execute(sql, values);
     res.status(200).send(result);
   } catch (err) {
